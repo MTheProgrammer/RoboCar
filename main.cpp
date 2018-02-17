@@ -11,19 +11,18 @@ ls::MotorController* motorController;
 
 void handleRequest()
 {
-    // only move if we submitted the form
     if (server.arg("stop")) {
         motorController->stop();
-    }
-    float left = 0;
-    float right = 0;
+    } 
     if (server.arg("left")) {
-        left = server.arg("left").toFloat();
+        float left = server.arg("left").toFloat();
+        motorController->setLeft(left);
     }
     if (server.arg("right")) {
-        right = server.arg("right").toFloat();
+        float right = server.arg("right").toFloat();
+        motorController->setRight(right);
     }
-    motorController->run(left, right);
+    motorController->update();    
     delay(100);
     server.send(200, "text/html", form);
 }
@@ -52,7 +51,6 @@ void setup()
 }
 void loop()
 {
-    // check for client connections
     server.handleClient();
 }
 

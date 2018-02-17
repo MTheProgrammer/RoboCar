@@ -17,8 +17,6 @@ namespace ls {
         };
         void setSpeed(int speed) { this->speed = speed; }  
         void run(int speed);
-        void forward();
-        void backward();
         void stop();
         void reset();
     };

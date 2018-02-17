@@ -3,44 +3,64 @@
 
 namespace ls {
 
-    float MotorController::roundPower(float power)
+    MotorController::MotorController():
+        powerLeft(0),
+        powerRight(0),
+        isStopped(true)
     {
-        return fabs(power) > 150 ? power : 0;
+        leftMotor = new Motor(4, 0);
+        rightMotor = new Motor(5, 2);
     }
 
-    void MotorController::run(float left, float right)
+    MotorController::~MotorController()
     {
-        leftMotor->run(roundPower(left));
-        rightMotor->run(roundPower(right));
+        if (leftMotor) {
+            delete leftMotor;
+        }
+        if (rightMotor) {
+            delete rightMotor;
+        }
     }
 
-    void MotorController::backward()
+    void MotorController::setLeft(float value)
     {
-        leftMotor->backward();
-        rightMotor->backward();
+        powerLeft = value;
+        isStopped = false;
     }
 
-    void MotorController::forward()
+    void MotorController::setRight(float value)
     {
-        leftMotor->forward();
-        rightMotor->forward();
+        powerRight = value;
+        isStopped = false;
     }
 
-    void MotorController::left()
+    void MotorController::update()
     {
-        leftMotor->backward();
-        rightMotor->forward();
-    }
-
-    void MotorController::right()
-    {
-        leftMotor->forward();
-        rightMotor->backward();
+        if (!isStopped) {
+            leftMotor->run(roundPower(powerLeft));
+            rightMotor->run(roundPower(powerRight));
+        }
     }
     
     void MotorController::stop()
     {
-        leftMotor->stop();
-        rightMotor->stop();  
+        if (!isStopped) {
+            isStopped = true;
+            leftMotor->stop();
+            rightMotor->stop();
+        }
+    }
+
+    float MotorController::roundPower(float power)
+    {
+        float bias = 10;
+        float minPower = 250;
+        float absPower = fabs(power);
+        if (absPower > bias) {
+            if (absPower < minPower) {
+                return power > 0 ? minPower : -minPower; 
+            }
+        }
+        return power;
     }
 }

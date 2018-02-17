@@ -9,27 +9,17 @@ namespace ls {
     {
         Motor* leftMotor;
         Motor* rightMotor;
+        float powerLeft;
+        float powerRight;
+        bool isStopped;
+        int updateStep = 500;
     public:
-        MotorController()
-        {
-            leftMotor = new Motor(4, 0);
-            rightMotor = new Motor(5, 2);
-        }
+        MotorController();
+        ~MotorController();
 
-        ~MotorController()
-        {
-            if (leftMotor) {
-                delete leftMotor;
-            }
-            if (rightMotor) {
-                delete rightMotor;
-            }
-        }
-        void run(float left, float right);
-        void backward();
-        void forward();
-        void left();
-        void right();
+        void setLeft(float value);
+        void setRight(float value);
+        void update();
         void stop();
     private:
         float roundPower(float power);

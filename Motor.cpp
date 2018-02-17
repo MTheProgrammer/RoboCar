@@ -16,18 +16,6 @@ namespace ls {
         digitalWrite(digitalPin, direction);
     }
 
-    void Motor::forward()
-    {
-        analogWrite(analogPin, speed);
-        digitalWrite(digitalPin, HIGH);
-    }
-
-    void Motor::backward()
-    {
-        analogWrite(analogPin, speed);
-        digitalWrite(digitalPin, LOW);
-    }
-
     void Motor::stop()
     {
         analogWrite(analogPin, 0);
